@@ -1,0 +1,59 @@
+#SQL CONTAINER --
+
+sudo apt-get install docker.io #Ubuntu/Debian
+#yum install docker - RedHat/CentOS
+
+#run a MySQL container
+docker run --name=test-mysql mysql
+
+#show all containers (including the non-running ones)
+docker ps -a
+
+#stop sql container
+docker stop test-mysql
+
+#remove sql container
+docker rm test-mysql
+
+#running container and run it again in detach mode (running as background)
+docker run --detach --name=test-mysql --env="MYSQL_ROOT_PASSWORD=mypassword" mysql
+
+#container log
+docker logs test-mysql
+
+######################
+CONNECTING CONTAINERS#
+######################
+
+
+#retrieve the IP address of that container in order to access it
+docker inspect test-mysql
+
+#could be - "172.17.0.2"
+
+sudo apt-get update
+
+#install mysql <- command from client package
+sudo apt-get install mysql-client*
+
+#access the MySQL server
+mysql -uroot -pmypassword -h 172.17.0.2 -P 3306
+
+#see Docker’s network range
+ip a | grep docker | grep inet
+
+#restart container
+docker stop test-mysql
+docker rm -f test-mysql
+docker start test-mysql
+docker inspect test-mysql | grep 172.17.0.2
+
+#Link the container to php
+docker run --detach --name test-wordpress --link test-mysql:mysql wordpress
+
+#check containers
+docker ps
+
+##use container
+docker exec -it test-wordpress bash
+#view hosts - # cat /etc/hosts

@@ -1,0 +1,44 @@
+
+
+
+#installing conjure/juju/Kubernetes
+
+sudo snap install conjure-up --classic
+conjure-up kubernetes
+
+#Add credentials to aws and make profile default
+juju add-credential aws
+juju list-credentials
+juju set-default-credential aws AcademyTrainee9
+
+#update clouds, equip cloud and deploy clusters
+juju update-clouds
+juju bootstrap aws/eu-west-2
+juju deploy canonical-kubernetes
+
+#Check status
+juju status
+
+#Check model
+juju model
+
+###
+mkdir -p ~/.kube
+juju scp kubernetes-master/0:config ~/.kube/config
+###
+
+#Destory all models/clusters
+juju destroy-controller aws-eu-west-2 --destroy-all-models
+
+
+##Download the latest release with the command:
+curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
+
+##Make the kubectl binary executable. 
+chmod +x ./kubectl
+
+##Move the binary in to your PATH.
+sudo mv ./kubectl /usr/local/bin/kubectl
+
+##Check that kubectl is properly configured by getting the cluster state:
+kubectl cluster-info

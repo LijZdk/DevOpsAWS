@@ -1,0 +1,37 @@
+##AWS CLI TERMINAL
+#Configuring your CLI
+##http://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_switch-role-cli.html
+
+aws configure
+
+#create security group
+aws ec2 create-security-group --group-name ELij-sg --description "Elijahs security group" --vpc-id vpc-dbd86eb2
+
+
+#add a rule that allows incoming traffic over port 22 for SSH
+aws ec2 authorize-security-group-ingress --group-name my-sg --protocol tcp --port 22 --cidr 0.0.0.0/0
+
+#Creating a Key Pair
+aws ec2 create-key-pair --key-name LijKeyPair --query 'ElijahsKeyMaterial' --output text > LijKeyPair.pem
+#MyKeyPair is the name of key pair
+
+#change key pair permissions
+#chmod 400 MyKeyPair.pem < Ubuntu/red hat
+
+#Display your new key
+aws ec2 describe-key-pairs --key-name LijKeyPair
+
+#Launch EC2 t1.mirco instance
+aws ec2 run-instances --image-id ami-f1d7c395 --count 1 --instance-type t2.micro --key-name LijKeyPair --security-group-ids sg-fa274b93 --subnet-id subnet-7d578c06
+
+#List of instances
+aws ec2 describe-instances --filters "Name=instance-type,Values=t2.micro"
+
+#Terminate Instance
+aws ec2 terminate-instances --instance-ids i-xxxxxxxxxxx
+
+#Terminate Security group
+aws ec2 delete-security-group --group-id sg-xxxxxx
+
+#Terminate Key Pairs
+aws ec2 delete-key-pair --key-name LijKeyPair

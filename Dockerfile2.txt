@@ -1,0 +1,47 @@
+
+
+##Docker -
+
+#wget -q -O - https://get.docker.com | sh
+#sudo yum install -y docker - CentOS
+#docker pull xxxx - get what you need
+#docker build -t imagename or docker build -t imagename --file="filename" .
+
+
+
+
+FROM ubuntu:latest
+MAINTAINER trainer
+
+RUN apt-get update -y
+
+RUN  apt-get install -y wget
+RUN  apt-get install -y tar
+
+RUN mkdir /opt/jdk
+RUN pwd
+
+WORKDIR /opt/jdk
+
+RUN wget --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" "http://download.oracle.com/otn-pub/java/jdk/8u131-b11/d54c1d3a095b4ff2b6607d096fa80163/jdk-8u131-linux-x64.tar.gz"
+
+RUN pwd
+
+RUN ls -a
+
+RUN tar zxvf jdk-8u131-linux-x64.tar.gz
+
+RUN update-alternatives --install /usr/bin/java java /opt/jdk/jdk1.8.0_131/bin/java 100
+RUN update-alternatives --install /usr/bin/java java /opt/jdk/jdk1.8.0_131/bin/javac 100
+
+RUN java -version
+
+RUN apt-get install -y git
+
+#Installs, Git, Java, Wget, tar
+
+
+
+
+
+
